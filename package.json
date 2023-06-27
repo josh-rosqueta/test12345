@@ -17,8 +17,8 @@
     "jsonwebtoken": "^9.0.0",
     "middlewares": "^0.1.1",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.22",
-    "request-promise": "^4.2.6",
+    "nodemon": "^1.14.9",
+    "request-promise": "^0.0.1",
     "viber-bot": "^1.0.18"
   }
 }
