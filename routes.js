@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const bot = require('./bot');
+const ViberBot = require('viber-bot').Bot;
+const BotEvents = require('viber-bot').Events;
 
 module.exports = router;
 
@@ -9,9 +10,10 @@ router.use((req, res, next) => {
     next();
 });
 
+
+
 router.post('/conversation_started', (req, res) => {
   const { event } = req.body;
-  bot.bot
   
   if (event === 'conversation_started') {
     try {
