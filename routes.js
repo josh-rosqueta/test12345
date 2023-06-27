@@ -13,6 +13,10 @@ router.post('/unsubscribed', unsubscribedHandler);
 
 module.exports = router;
 
+router.use((req, res, next) => {
+    req.headers['x-viber-auth-token'] = '513d6faf5fe7e2c3-86ed98ee495db94b-d885f5b71e8ea0ee'; // Replace with your Viber authentication token
+    next();
+});
 
 router.post('/conversation_started', (req, res) => {
   const { event } = req.body;
