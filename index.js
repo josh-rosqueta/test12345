@@ -11,6 +11,7 @@ require("dotenv").config();
 const server = express();
 
 const PORT = process.env.PORT || 8081;
+const viberURL = 'https://chatapi.viber.com/pa/send_message';
 
 const bot = new ViberBot({
 	authToken: process.env.ACCESS_TOKEN,
@@ -18,22 +19,76 @@ const bot = new ViberBot({
 	avatar: "https://developers.viber.com/docs/img/stickers/40122.png" // It is recommended to be 720x720, and no more than 100kb.
 });
 
+async function sendMessageWithButtons(receiverId, text, button1Text, button1Data, button2Text, button2Data) {
+  const message = {
+    receiver: receiverId,
+    type: 'text',
+    text: text,
+    keyboard: {
+      Type: 'keyboard',
+      Buttons: [
+        {
+            Columns: 6,
+            Rows: 1,
+            ActionType: 'reply',
+            ActionBody: button1Data,
+            Text: button1Text,
+            TextSize: 'large'
+          },
+          {
+            Columns: 6,
+            Rows: 1,
+            ActionType: 'reply',
+            ActionBody: button2Data,
+            Text: button2Text,
+            TextSize: 'large'
+          }
+      ]
+    }
+  };
 
-server.use(cors());
-server.use(helmet());
-server.use(morgan("dev"));
-server.use(middlewares);
-server.use(express.json({ limit: "50mb" }));
-server.use(express.urlencoded({ limit: "50mb", extended: true }));
-server.use("/viber/webhook", bot.middleware());
+  const options = {
+    uri: viberURL,
+    method: 'POST',
+    headers: {
+      'X-Viber-Auth-Token': process.env.ACCESS_TOKEN,
+      'Content-Type': 'application/json'
+    },
+    body: message,
+    json: true
+  };
 
-server.post("/api/token", function (req, res) {
-  const user = { id: 3 };
-  const tokens = jwt.sign({ user }, "rTTYB866J_Y<)fu");
-  res.json({
-    tokens: tokens,
-  });
-});
+  try {
+    const response = await request(options);
+    console.log(response);
+    return message; // Print the response (for debugging)
+  } catch (error) {
+    console.error(error); // Handle the error
+  }
+}
+
+
+function checkUrlAvailability(botResponse, text_received) {
+    let sender_name = botResponse.userProfile.name;
+    let sender_id = botResponse.userProfile.id;
+    let message;
+    
+    const receiverId = 'RECEIVER_USER_ID';
+    const text = 'Choose an option:';
+    const button1Text = 'Start';
+    const button1Data = 'button1';
+    const button2Text = 'End Conversation';
+    const button2Data = 'button2';
+
+
+    sendMessageWithButtons(sender_id, text, button1Text, button1Data, button2Text, button2Data).then(response => {
+        const messageType = response.keyboard.Type;
+        const buttons = response.keyboard.Buttons;
+    }).catch(error => console.error(error));
+}
+
+server.use(express.json());
+server.use('/viber/webhook', bot.middleware());
 
 bot.onSubscribe(response => {
   say(response, `Hi there ${response.userProfile.name}. I am ${bot.name}! Feel free to ask me if a web site is down for everyone or just you. Just send me a name of a website and I'll do the rest!`);
@@ -57,6 +112,6 @@ bot.onTextMessage(/./, (message, response) => {
 
 bot.getBotProfile().then(response => console.log(`Bot Named: ${response.name}`));
 
-server.listen(PORT, async () => {
-  console.log("Server is running on port", PORT);
+server.listen(3000, () => {
+  console.log('Server listening on port 3000');
 });
