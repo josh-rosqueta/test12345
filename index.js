@@ -13,69 +13,69 @@ const server = express();
 server.use(express.json());
 server.use('/viber/webhook', bot.middleware());
 
-// const viberURL = 'https://chatapi.viber.com/pa/send_message';
-// async function sendMessageWithButtons(receiverId, text, button1Text, button1Data, button2Text, button2Data) {
-//   const message = {
-//     receiver: receiverId,
-//     type: 'text',
-//     text: text,
-//     keyboard: {
-//       Type: 'keyboard',
-//       Buttons: [
-//         {
-//             Columns: 6,
-//             Rows: 1,
-//             ActionType: 'reply',
-//             ActionBody: button1Data,
-//             Text: button1Text,
-//             TextSize: 'large'
-//           },
-//           {
-//             Columns: 6,
-//             Rows: 1,
-//             ActionType: 'reply',
-//             ActionBody: button2Data,
-//             Text: button2Text,
-//             TextSize: 'large'
-//           }
-//       ]
-//     }
-//   };
+const viberURL = 'https://chatapi.viber.com/pa/send_message';
+async function sendMessageWithButtons(receiverId, text, button1Text, button1Data, button2Text, button2Data) {
+  const message = {
+    receiver: receiverId,
+    type: 'text',
+    text: text,
+    keyboard: {
+      Type: 'keyboard',
+      Buttons: [
+        {
+            Columns: 6,
+            Rows: 1,
+            ActionType: 'reply',
+            ActionBody: button1Data,
+            Text: button1Text,
+            TextSize: 'large'
+          },
+          {
+            Columns: 6,
+            Rows: 1,
+            ActionType: 'reply',
+            ActionBody: button2Data,
+            Text: button2Text,
+            TextSize: 'large'
+          }
+      ]
+    }
+  };
 
-//   const options = {
-//     uri: viberURL,
-//     method: 'POST',
-//     headers: {
-//       'X-Viber-Auth-Token': process.env.ACCESS_TOKEN,
-//       'Content-Type': 'application/json'
-//     },
-//     body: message,
-//     json: true
-//   };
+  const options = {
+    uri: viberURL,
+    method: 'POST',
+    headers: {
+      'X-Viber-Auth-Token': process.env.ACCESS_TOKEN,
+      'Content-Type': 'application/json'
+    },
+    body: message,
+    json: true
+  };
 
-//   try {
-//     const response = await request(options);
-//     console.log(response);
-//     return message; // Print the response (for debugging)
-//   } catch (error) {
-//     console.error(error); // Handle the error
-//   }
-// }
+  try {
+    const response = await request(options);
+    console.log(response);
+    return message; // Print the response (for debugging)
+  } catch (error) {
+    console.error(error); // Handle the error
+  }
+}
 
 
-// function checkUrlAvailability(botResponse, text_received) {
-//     let sender_id = botResponse.userProfile.id;
+function checkUrlAvailability(botResponse, text_received) {
+    let sender_id = botResponse.userProfile.id;
     
-//     const text = 'Choose an option:';
-//     const button1Text = 'Start';
-//     const button1Data = 'button1';
-//     const button2Text = 'End Conversation';
-//     const button2Data = 'button2';
+    const text = 'Choose an option:';
+    const button1Text = 'Start';
+    const button1Data = 'button1';
+    const button2Text = 'End Conversation';
+    const button2Data = 'button2';
 
 
-//     sendMessageWithButtons(sender_id, text, button1Text, button1Data, button2Text, button2Data).then(response => {
-//     }).catch(error => console.error(error));
-// }
+    sendMessageWithButtons(sender_id, text, button1Text, button1Data, button2Text, button2Data).then(response => {
+    }).catch(error => console.error(error));
+}
 
 const PORT = process.env.PORT || 8081;
 
