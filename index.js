@@ -9,8 +9,6 @@ const BotEvents = require('viber-bot').Events;
 require("dotenv").config();
 
 const server = express();
-
-const PORT = process.env.PORT || 8081;
 const viberURL = 'https://chatapi.viber.com/pa/send_message';
 
 const bot = new ViberBot({
@@ -69,11 +67,8 @@ async function sendMessageWithButtons(receiverId, text, button1Text, button1Data
 
 
 function checkUrlAvailability(botResponse, text_received) {
-    let sender_name = botResponse.userProfile.name;
     let sender_id = botResponse.userProfile.id;
-    let message;
     
-    const receiverId = 'RECEIVER_USER_ID';
     const text = 'Choose an option:';
     const button1Text = 'Start';
     const button1Data = 'button1';
@@ -82,8 +77,6 @@ function checkUrlAvailability(botResponse, text_received) {
 
 
     sendMessageWithButtons(sender_id, text, button1Text, button1Data, button2Text, button2Data).then(response => {
-        const messageType = response.keyboard.Type;
-        const buttons = response.keyboard.Buttons;
     }).catch(error => console.error(error));
 }
 
