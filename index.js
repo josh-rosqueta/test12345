@@ -120,8 +120,9 @@ bot.onTextMessage(/./, (message, response) => {
 });
 
 bot.getBotProfile().then(response => console.log(`Bot Named: ${response.name}`));
-
-http.createServer(bot.middleware()).listen(port, () => bot.setWebhook(process.env.NOW_URL));
+const port = process.env.PORT || 5000;
+const http = require('http');
+http.createServer(bot.middleware()).listen();
 
 // if (process.env.NOW_URL || process.env.HEROKU_URL) {
 //     const http = require('http');
