@@ -1,15 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const bot = require('./bot');
-const conversationStartedHandler = require('./conversationStartedHandler');
-const messageHandler = require('./messageHandler');
-const subscribedHandler = require('./subscribedHandler');
-const unsubscribedHandler = require('./unsubscribedHandler');
-
-router.post('/conversation_started', conversationStartedHandler);
-router.post('/message', messageHandler);
-router.post('/subscribed', subscribedHandler);
-router.post('/unsubscribed', unsubscribedHandler);
 
 module.exports = router;
 
@@ -20,11 +11,13 @@ router.use((req, res, next) => {
 
 router.post('/conversation_started', (req, res) => {
   const { event } = req.body;
+  bot.bot
   
   if (event === 'conversation_started') {
     try {
       // Handle conversation_started event
       const { user, subscribed } = req.body;
+      console.log("HELLO");
       // Your logic goes here
     } catch (error) {
       console.error('Error handling conversation_started event:', error);
